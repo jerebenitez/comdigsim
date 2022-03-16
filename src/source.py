@@ -3,15 +3,20 @@ import numpy as np
 
 
 class Source:
-  def __init__(self, symbols: Dict[str, float]) -> None:
-    self._rng = np.random.default_rng()
-    self.alphabet = symbols
+    def __init__(self, symbols: Dict[str, float]) -> None:
+        self._rng = np.random.default_rng()
+        self.alphabet = symbols
+        self._output = None
 
-  def generate_messages(self, n: int = None) -> str:
+    @property
+    def output(self) -> List[str]:
+        return self._input
+
+  def generate_messages(self, n: int = None) -> None:
     if n is None:
         raise AttributeError("No amount of messages to generate provided")
 
-    return self._rng.choice(list(self.alphabet.keys()), n, p=list(self.alphabet.values()))
+    self._output = self._rng.choice(list(self.alphabet.keys()), n, p=list(self.alphabet.values()))
 
 
 class UniformSource(Source):
