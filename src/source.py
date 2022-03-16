@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 import numpy as np
 
@@ -18,9 +18,16 @@ class Source:
                 "The alphabet list and the probabilities list do not match."
             )
         self.probabilities = probabilities
+        self._symbols = {
+            self.alphabet[i]: self.probabilities[i]
+            for i in range(len(self.probabilities))
+        }
 
         self._rng = np.random.default_rng()
         self._output = None
+
+    def get_probability_for(self, symbol: Any) -> float:
+        return self._symbols[symbol]
 
     @property
     def output(self) -> List[str]:

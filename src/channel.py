@@ -49,6 +49,13 @@ class PoissonChannel(Channel):
     def params(self) -> List[float]:
         return self._lambdas
 
+    @params.setter
+    def params(self, lambdas: List[float]) -> None:
+        if len(lambdas) != len(self._input.alphabet):
+            raise AttributeError("The alphabet list and the lambda list do not match.")
+
+        self._lambdas = lambdas
+
     def mapper(self, *args, **kwargs) -> Union[ndarray, int, float, complex]:
         return np.random.poisson(*args, **kwargs)
 
