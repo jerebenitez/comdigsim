@@ -35,17 +35,23 @@ class Channel:
 
 
 class PoissonChannel(Channel):
-    def __init__(self, input_source: Source, dist: Dict[str, float]) -> None:
-        self._params = dist
+    def __init__(self, input_source: Source, lambdas: List[float]) -> None:
+        if len(lambdas) != len(input_source.alphabet):
+            raise AttributeError("The alphabet list and the lambda list do not match.")
+
+        self._lambdas = lambdas
+        self._symbols = {
+            input_source.alphabet[i]: lambdas[i] for i in range(len(lambdas))
+        }
         super().__init__(input_source)
 
     @property
-    def params(self) -> Dict[str, float]:
-        return self._params
+    def params(self) -> List[float]:
+        return self._lambdas
 
     def mapper(self, *args, **kwargs) -> Union[ndarray, int, float, complex]:
         return np.random.poisson(*args, **kwargs)
 
     @property
     def output(self) -> list[Any]:
-        return [self.mapper(self._params[x]) for x in self.input]
+        return [self.mapper(self._symbols[symbol]) for symbol in self.input]
