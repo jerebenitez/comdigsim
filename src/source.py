@@ -15,6 +15,6 @@ class Source:
 
 
 class UniformSource(Source):
-    def __init__(self, symbols: List[str]) -> None:
+    def __init__(self, *symbols: str) -> None:
         super().__init__({symbol:1 / len(symbols) for symbol in symbols})
 
