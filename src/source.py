@@ -17,6 +17,10 @@ class Source:
             raise AttributeError(
                 "The alphabet list and the probabilities list do not match."
             )
+
+        if sum(probabilities) != 1:
+            raise AttributeError("The probabilities are not normalized.")
+
         self.probabilities = probabilities
         self._symbols = {
             self.alphabet[i]: self.probabilities[i]
