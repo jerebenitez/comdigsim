@@ -11,7 +11,7 @@ class Channel:
         self._input = input_source
 
     @property
-    def input(self) -> List[str]:
+    def input(self) -> List[Any]:
         return self._input.output
 
     @input.setter
