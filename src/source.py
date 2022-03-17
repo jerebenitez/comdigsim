@@ -28,20 +28,23 @@ class Source:
         }
 
         self._rng = np.random.default_rng()
-        self._output = None
+        self._output = []
 
     def get_probability_for(self, symbol: Any) -> float:
         return self._symbols[symbol]
 
     @property
     def output(self) -> List[str]:
-        return self._output if self._output is not None else []
+        return self._output
 
     def generate_messages(self, n: int = None) -> None:
         if n is None:
-            raise AttributeError("No amount of messages to generate provided")
+            raise AttributeError("No amount of messages to generate provided.")
 
         self._output = self._rng.choice(self.alphabet, n, p=self.probabilities)
+
+    def clear_messages(self):
+        self._output = []
 
 
 class UniformSource(Source):
