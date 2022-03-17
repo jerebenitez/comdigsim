@@ -38,6 +38,13 @@ class TestSource(unittest.TestCase):
         s.generate_messages(messages)
         self.assertEqual(len(s.output), messages)
 
+    def test_clear_messages(self) -> None:
+        messages = 10
+        s = Source(self.alphabet, [0.5, 0.5])
+        s.generate_messages(messages)
+        s.clear_messages()
+        self.assertEqual(s.output, [])
+
 
 class TestUniformSource(unittest.TestCase):
     def test_probabilities_are_assigned_correctly(self) -> None:
