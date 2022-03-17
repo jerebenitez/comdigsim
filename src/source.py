@@ -6,7 +6,7 @@ from src.utils import alphabet_is_valid
 
 
 class Source:
-    def __init__(self, symbols: List[str], probabilities: List[float]) -> None:
+    def __init__(self, symbols: List[Any], probabilities: List[float]) -> None:
         if not alphabet_is_valid(symbols):
             raise AttributeError(
                 "The alphabet list should not contain repeated symbols."
@@ -34,7 +34,7 @@ class Source:
         return self._symbols[symbol]
 
     @property
-    def output(self) -> List[str]:
+    def output(self) -> List[Any]:
         return self._output
 
     def generate_messages(self, n: int = None) -> None:
@@ -48,7 +48,7 @@ class Source:
 
 
 class UniformSource(Source):
-    def __init__(self, symbols: List[str]) -> None:
+    def __init__(self, symbols: List[Any]) -> None:
         super().__init__(
             symbols=symbols,
             probabilities=[1 / len(symbols) for _ in symbols],
