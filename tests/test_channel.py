@@ -16,7 +16,7 @@ class TestChannel(ut.TestCase):
     def test_no_output_function_set(self) -> None:
         c = Channel(input_source=self.source)
         with self.assertRaises(NotImplementedError):
-            a = c.output
+            _ = c.output
 
 
 class TestPoissonChannel(ut.TestCase):
@@ -35,4 +35,4 @@ class TestPoissonChannel(ut.TestCase):
 
     def test_fail_on_incorrect_lambdas(self) -> None:
         with self.assertRaises(AttributeError):
-            c = PoissonChannel(input_source=self.source, lambdas=[])
+            _ = PoissonChannel(input_source=self.source, lambdas=[])
