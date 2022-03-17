@@ -1,9 +1,9 @@
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, List, Union
 
 import numpy as np
 from numpy import ndarray
 
-from source import Source
+from src.source import Source
 
 
 class Channel:
@@ -28,7 +28,7 @@ class Channel:
             "An output function needs to be implemented for this channel."
         )
 
-    def mapper(self) -> Callable:
+    def distribution(self) -> Callable:
         raise NotImplementedError(
             "A mapper function needs to be implemented for this channel."
         )
@@ -36,14 +36,18 @@ class Channel:
 
 class PoissonChannel(Channel):
     def __init__(self, input_source: Source, lambdas: List[float]) -> None:
-        if len(lambdas) != len(input_source.alphabet):
-            raise AttributeError("The alphabet list and the lambda list do not match.")
-
-        self._lambdas = lambdas
+        super().__init__(input_source)
+        self._lambdas = None
+        self.set_lambdas(lambdas)
         self._symbols = {
             input_source.alphabet[i]: lambdas[i] for i in range(len(lambdas))
         }
-        super().__init__(input_source)
+
+    def set_lambdas(self, lambdas):
+        if len(lambdas) != len(self._input.alphabet):
+            raise AttributeError("The alphabet list and the lambda list do not match.")
+
+        self._lambdas = lambdas
 
     @property
     def params(self) -> List[float]:
@@ -51,14 +55,11 @@ class PoissonChannel(Channel):
 
     @params.setter
     def params(self, lambdas: List[float]) -> None:
-        if len(lambdas) != len(self._input.alphabet):
-            raise AttributeError("The alphabet list and the lambda list do not match.")
+        self.set_lambdas(lambdas)
 
-        self._lambdas = lambdas
-
-    def mapper(self, *args, **kwargs) -> Union[ndarray, int, float, complex]:
+    def distribution(self, *args, **kwargs) -> Union[ndarray, int, float, complex]:
         return np.random.poisson(*args, **kwargs)
 
     @property
     def output(self) -> list[Any]:
-        return [self.mapper(self._symbols[symbol]) for symbol in self.input]
+        return [self.distribution(self._symbols[symbol]) for symbol in self.input]
