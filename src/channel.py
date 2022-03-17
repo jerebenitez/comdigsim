@@ -22,13 +22,16 @@ class Channel:
     def input(self) -> None:
         self._input = None
 
+    def get_probability_for(self, signal: Any) -> float:
+        return self.distribution(signal)
+
     @property
     def output(self) -> List[Any]:
         raise NotImplementedError(
             "An output function needs to be implemented for this channel."
         )
 
-    def distribution(self) -> Callable:
+    def distribution(self, *args, **kwargs) -> Union[ndarray, int, float, complex]:
         raise NotImplementedError(
             "A mapper function needs to be implemented for this channel."
         )
