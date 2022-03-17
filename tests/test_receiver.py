@@ -27,3 +27,9 @@ class TestMAPReceiver(ut.TestCase):
     def test_should_make_a_prediction_for_all_messages(self) -> None:
         r = MAPReceiver(source=self.source, channel=self.channel)
         self.assertEqual(len(r.output), self.no_of_messages)
+
+    def test_all_predictions_should_belong_to_source_alphabet(self) -> None:
+        r = MAPReceiver(source=self.source, channel=self.channel)
+        self.assertEqual(
+            all(isinstance(x, type(self.source.alphabet[0])) for x in r.output), True
+        )
