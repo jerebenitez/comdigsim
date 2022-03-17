@@ -45,6 +45,10 @@ class TestSource(unittest.TestCase):
         s.clear_messages()
         self.assertEqual(s.output, [])
 
+    def test_source_works_with_int_symbols(self) -> None:
+        s = Source([0, 1], [0.5, 0.5])
+        self.assertEqual(s.alphabet, [0, 1])
+
 
 class TestUniformSource(unittest.TestCase):
     def test_probabilities_are_assigned_correctly(self) -> None:
