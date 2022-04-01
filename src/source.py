@@ -2,7 +2,7 @@ from typing import Any, List
 
 import numpy as np
 
-from src.utils import alphabet_is_valid
+from utils import alphabet_is_valid
 
 
 class Source:
