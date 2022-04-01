@@ -2,8 +2,9 @@ from typing import Any, Callable, List, Union
 
 import numpy as np
 from numpy import ndarray
+from scipy.stats.distributions import poisson
 
-from src.source import Source
+from source import Source
 
 
 class Channel:
@@ -22,8 +23,10 @@ class Channel:
     def input(self) -> None:
         self._input = None
 
-    def get_probability_for(self, signal: Any) -> float:
-        return self.distribution(signal)
+    def get_probability_for(self, signal: Any, symbol: Any) -> float:
+        raise NotImplementedError(
+            "A get_probability_for function needs to be implemented for this channel."
+        )
 
     @property
     def output(self) -> List[Any]:
@@ -42,9 +45,7 @@ class PoissonChannel(Channel):
         super().__init__(input_source)
         self._lambdas = None
         self.set_lambdas(lambdas)
-        self._symbols = {
-            input_source.alphabet[i]: lambdas[i] for i in range(len(lambdas))
-        }
+        self._symbols = {input_source.alphabet[i]: v for i, v in enumerate(lambdas)}
 
     def set_lambdas(self, lambdas):
         if len(lambdas) != len(self._input.alphabet):
@@ -66,3 +67,6 @@ class PoissonChannel(Channel):
     @property
     def output(self) -> list[Any]:
         return [self.distribution(self._symbols[symbol]) for symbol in self.input]
+
+    def get_probability_for(self, signal: Any, symbol: Any) -> float:
+        return poisson.pmf(signal, self._symbols[symbol])
